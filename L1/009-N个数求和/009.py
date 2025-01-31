@@ -1,32 +1,40 @@
+def GCD(a,b):
+    max_num=max(abs(a),abs(b))
+    min_num=min(abs(a),abs(b))
+    while max_num%min_num:
+        max_num,min_num=min_num,max_num%min_num
+    return min_num
+
 N=int(input())
-nums=list(input().split())
-nums0=[]
-nums1=[]
-num0=0
-num1=1
-#化简
-def ease(num0,num1):
-    for i in range(int(num1**0.5)+1,1,-1):
-        if abs(num0)%i==0 and abs(num1)%i==0 and num0!=0:
-            num0//=i
-            num1//=i
-    return(num0,num1)
-#获取所有分子、分母
-for num in nums:
-    temp=list(num.split('/'))
-    #两项分子通分
-    num0=num0*(int(temp[1]))+(int(temp[0]))*num1
-    num1*=(int(temp[1]))
-    num0,num1=ease(num0,num1)
-nums1_=nums1[:]
-if num0==0:
-    print(0)
-elif abs(num0)>=abs(num1):
-    if abs(num0)%abs(num1)==0:
-        print(num0//num1)
+list0=list(input().split())
+if N>=2:
+    for i in range(N-1):
+        a0,d0=map(int,list0[i].split('/'))
+        a1,d1=map(int,list0[i+1].split('/'))
+        if a1!=0 and a0!=0:
+            d=GCD(d0,d1)
+            a=int(a0*(d1//d)+a1*(d0//d))
+            d=int(d0*(d1//d))
+            list0[i+1]=str(a)+'/'+str(d)
+        elif a1==0:
+            list0[i+1]=str(a0)+'/'+str(d0)
+
+a,d=map(int,list0[len(list0)-1].split('/'))
+if a!=0 and d!=0:
+    m=GCD(a,d)
+    a,d=a//m,d//m
+    if abs(a)>=d:
+        if abs(a)%d!=0:
+            if a>0:
+                print(f'{a//d} {a%d}/{d}')
+            if a<0:
+                print(f'{-(abs(a)//d)} {-(abs(a)%d)}/{d}')
+        else:
+            if a>0:
+                print(f'{a//d}')
+            if a<0:
+                print(f'{-(abs(a)//d)}')
     else:
-        ans0=num0//num1
-        num0=num0%num1
-        print(f'{ans0} {num0}/{num1}')
+        print(f'{a}/{d}')
 else:
-    print(f'{num0}/{num1}')
+    print(0)
